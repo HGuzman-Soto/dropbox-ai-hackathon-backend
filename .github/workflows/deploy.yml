@@ -1,0 +1,29 @@
+name: Deploy to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Generate deployment package
+        run: zip -r dropbox-ai-hackathon-backend.zip . -x '*.git*'
+
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v14
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: dropbox-ai-hackathon-backend
+          environment_name: dropbox-ai-hackathon-backend-dev
+          version_label: github-${{ github.sha }}
+          region: us-west-2
+          deployment_package: dropbox-ai-hackathon-backend.zip
