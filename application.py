@@ -70,13 +70,13 @@ def summarize_text(text: str):
     summary_ids = model.generate(inputs['input_ids'], num_beams=4, max_length=100, early_stopping=True)
     return tokenizer.decode(summary_ids[0], skip_special_tokens=True)
 
-app = Flask(__name__)
+application = Flask(__name__)
 
-@app.route('/')
+@application.route('/')
 def dummy_route():
     return "Working"
 
-download_dropbox_files()
+list_dropbox_signature_requests()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    application.run(debug=True)
